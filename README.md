@@ -1,5 +1,3 @@
-# mwmapi
+# MediaWiki Manager API
 
-    go run main.go
-
-    http://localhost:8080
+MWMAPI is the API part of https://github.com/dataspects/mediawiki-manager.

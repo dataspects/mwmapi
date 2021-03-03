@@ -3,8 +3,9 @@ package mediawiki
 import (
 	"crypto/tls"
 	"encoding/json"
-	"log"
+	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -62,9 +63,23 @@ func GeneralSiteInfo() (GSI, error) {
 
 	}
 	defer res.Body.Close()
-	log.Println(gsi)
-
 	return gsi, nil
+}
+
+// WfLoadExtensions -
+func WfLoadExtensions(lsURL string) ([]string, error) {
+	wle := []string{}
+	data, err := ioutil.ReadFile(lsURL)
+	if err != nil {
+		return wle, err
+	}
+	re := regexp.MustCompile("#?wfLoadExtension.*;")
+	matches := re.FindAllString(string(data), -1)
+
+	for _, match := range matches {
+		wle = append(wle, match)
+	}
+	return wle, nil
 }
 
 func mwapicall(url string) *http.Response {

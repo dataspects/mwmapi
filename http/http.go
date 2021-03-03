@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/dataspects/mwmapi/api"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
@@ -13,7 +14,7 @@ import (
 func Serve(p int, ao []string) error {
 	r := mux.NewRouter().StrictSlash(true)
 
-	r.HandleFunc("/indexing/facetmanager", api.Info).Methods("POST")
+	r.HandleFunc("/mediawiki/generalSiteInfo", api.MediaWikiGeneralSiteInfo).Methods("GET")
 
 	log.Println("Web Service listening on: http://localhost:" + strconv.Itoa(p))
 	c := cors.New(cors.Options{

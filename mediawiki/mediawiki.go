@@ -4,7 +4,9 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -51,13 +53,14 @@ type Skin struct {
 
 // GeneralSiteInfo -
 func GeneralSiteInfo() (GSI, error) {
+	log.Println("Requesting GeneralSiteInfo...")
 	gsi := GSI{}
 	props := []string{
 		"general",
 		"extensions",
 		"skins",
 	}
-	res := mwapicall("https://dserver/w/api.php?format=json&action=query&meta=siteinfo&siprop=" + strings.Join(props, "|"))
+	res := mwapicall(os.Getenv("MWAPI") + "?format=json&action=query&meta=siteinfo&siprop=" + strings.Join(props, "|"))
 	err := json.NewDecoder(res.Body).Decode(&gsi)
 	if err != nil {
 
@@ -68,6 +71,7 @@ func GeneralSiteInfo() (GSI, error) {
 
 // WfLoadExtensions -
 func WfLoadExtensions(lsURL string) ([]string, error) {
+	log.Println("Requesting WfLoadExtensions...")
 	wle := []string{}
 	data, err := ioutil.ReadFile(lsURL)
 	if err != nil {

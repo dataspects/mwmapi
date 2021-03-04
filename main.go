@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	err := http.Serve(8080, []string{"localhost"})
+	err := http.Serve(3000, []string{"https://dserver/ui/", "http://dserver:8000"})
 	if err != nil {
 		log.Println(err)
 	}

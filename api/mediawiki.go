@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/dataspects/mwmapi/mediawiki"
 )
@@ -10,7 +11,8 @@ import (
 func MediaWikiGeneralSiteInfo(w http.ResponseWriter, r *http.Request) {
 	var err error
 	resp := make(map[string]interface{})
-	resp["info"], err = mediawiki.GeneralSiteInfo()
+	resp["data"], err = mediawiki.GeneralSiteInfo()
+	resp["status"] = "MediaWiki info loaded"
 	if err != nil {
 
 	}
@@ -21,7 +23,7 @@ func MediaWikiGeneralSiteInfo(w http.ResponseWriter, r *http.Request) {
 func MediaWikiWfLoadExtensions(w http.ResponseWriter, r *http.Request) {
 	var err error
 	resp := make(map[string]interface{})
-	resp["info"], err = mediawiki.WfLoadExtensions("/home/lex/mediawiki-manager/mediawiki_root/w/LocalSettings.php")
+	resp["info"], err = mediawiki.WfLoadExtensions(os.Getenv("MWROOT") + "/LocalSettings.php")
 	if err != nil {
 
 	}

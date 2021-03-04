@@ -60,10 +60,13 @@ func GeneralSiteInfo() (GSI, error) {
 		"extensions",
 		"skins",
 	}
-	res := mwapicall(os.Getenv("MWAPI") + "?format=json&action=query&meta=siteinfo&siprop=" + strings.Join(props, "|"))
-	err := json.NewDecoder(res.Body).Decode(&gsi)
+	res, err := mwapicall(os.Getenv("MWAPI") + "?format=json&action=query&meta=siteinfo&siprop=" + strings.Join(props, "|"))
 	if err != nil {
-
+		return gsi, err
+	}
+	err = json.NewDecoder(res.Body).Decode(&gsi)
+	if err != nil {
+		return gsi, err
 	}
 	defer res.Body.Close()
 	return gsi, nil
@@ -86,17 +89,17 @@ func WfLoadExtensions(lsURL string) ([]string, error) {
 	return wle, nil
 }
 
-func mwapicall(url string) *http.Response {
+func mwapicall(url string) (*http.Response, error) {
 	client := client()
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-
+		log.Println(err)
 	}
 	res, err := client.Do(req)
 	if err != nil {
-
+		log.Println(err)
 	}
-	return res
+	return res, err
 }
 
 func client() *http.Client {

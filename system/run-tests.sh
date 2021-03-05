@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export MWAPI=https://dserver/w/api.php
 export MWROOT=/home/lex/mediawiki-manager/mediawiki_root/w
 
 go test -v -coverprofile=cp.out

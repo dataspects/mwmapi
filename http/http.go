@@ -14,8 +14,10 @@ import (
 func Serve(p int, ao []string) error {
 	r := mux.NewRouter().StrictSlash(true)
 
+	r.HandleFunc("/mediawiki/isInSafeMode", api.MediaWikiIsInSafeMode).Methods("GET")
 	r.HandleFunc("/mediawiki/generalSiteInfo", api.MediaWikiGeneralSiteInfo).Methods("GET")
 	r.HandleFunc("/mediawiki/wfLoadExtensions", api.MediaWikiWfLoadExtensions).Methods("GET")
+	r.HandleFunc("/system/GetSetupDiff", api.SystemGetSetupDiff).Methods("GET")
 
 	log.Println("Web Service listening on: http://localhost:" + strconv.Itoa(p))
 	c := cors.New(cors.Options{

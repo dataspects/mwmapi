@@ -1,12 +1,14 @@
 package mediawiki
 
 import (
+	"bytes"
 	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 )
@@ -51,6 +53,22 @@ type Skin struct {
 	Code string `json:"code"`
 }
 
+// IsInSafeMode -
+func IsInSafeMode(containerName string) (bool, error) {
+	cmd := exec.Command("sudo", "docker", "exec", "-t", containerName, "cat", "/var/www/html/w/LocalSettings.php")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		return false, err
+	}
+	re := regexp.MustCompile(`\$wgSiteNotice = '================ MWM Safe Mode ================';`)
+	if re.FindString(out.String()) != "" {
+		return true, nil
+	}
+	return false, nil
+}
+
 // GeneralSiteInfo -
 func GeneralSiteInfo() (GSI, error) {
 	log.Println("Requesting GeneralSiteInfo...")
@@ -82,7 +100,6 @@ func WfLoadExtensions(lsURL string) ([]string, error) {
 	}
 	re := regexp.MustCompile("#?wfLoadExtension.*;")
 	matches := re.FindAllString(string(data), -1)
-
 	for _, match := range matches {
 		wle = append(wle, match)
 	}

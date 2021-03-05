@@ -1,3 +1,3 @@
-export MWAPI=https://dserver/w/api.php
-export MWROOT=/home/lex/mediawiki-manager/mediawiki_root/w
+source devConfig.env
+
 go run main.go

@@ -1,10 +1,15 @@
 package mediawiki
 
 import (
+	"log"
 	"os"
 	"testing"
 )
 
+func TestIsInSafeMode(t *testing.T) {
+	iism, _ := IsInSafeMode(os.Getenv("MWCONTAINER"))
+	log.Println(iism)
+}
 func TestGeneralSiteInfo(t *testing.T) {
 	gsi, err := GeneralSiteInfo()
 	if err != nil {
